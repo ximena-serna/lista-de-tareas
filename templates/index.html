@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lista de tareas</title>
+  <style>
+    .completada { text-decoration: line-through; color: #888; }
+  </style>
 </head>
 <body>
   <h1>Lista de tareas</h1>
@@ -16,7 +19,12 @@
   {% if tareas %}
     <ul>
       {% for tarea in tareas %}
-        <li>{{ tarea.texto }}</li>
+        <li>
+          <span class="{{ 'completada' if tarea.completada else '' }}">{{ tarea.texto }}</span>
+          <form action="{{ url_for('completar', tarea_id=tarea.id) }}" method="post" style="display: inline;">
+            <button type="submit">{{ 'Desmarcar' if tarea.completada else 'Completar' }}</button>
+          </form>
+        </li>
       {% endfor %}
     </ul>
   {% else %}

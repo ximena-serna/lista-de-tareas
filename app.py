@@ -23,5 +23,14 @@ def agregar():
     return redirect(url_for("index"))
 
 
+@app.route("/completar/<int:tarea_id>", methods=["POST"])
+def completar(tarea_id):
+    for tarea in tareas:
+        if tarea["id"] == tarea_id:
+            tarea["completada"] = not tarea["completada"]
+            break
+    return redirect(url_for("index"))
+
+
 if __name__ == "__main__":
     app.run(port=3000, debug=True)
