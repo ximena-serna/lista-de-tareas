@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
@@ -39,4 +40,5 @@ def eliminar(tarea_id):
 
 
 if __name__ == "__main__":
-    app.run(port=3000, debug=True)
+    debug = os.environ.get("FLASK_DEBUG") == "1"
+    app.run(port=3000, debug=debug)
