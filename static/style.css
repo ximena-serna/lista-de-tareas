@@ -1,0 +1,80 @@
+body {
+  font-family: system-ui, sans-serif;
+  background: #f4f4f6;
+  margin: 0;
+  padding: 40px 16px;
+  color: #222;
+}
+
+.contenedor {
+  max-width: 520px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 24px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+  margin-top: 0;
+}
+
+.form-agregar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.form-agregar input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #3b6fd8;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+button.eliminar {
+  background: #d84b3b;
+}
+
+.lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lista li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.lista li.completada .texto {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.acciones {
+  display: flex;
+  gap: 6px;
+}
+
+.vacio {
+  color: #888;
+}

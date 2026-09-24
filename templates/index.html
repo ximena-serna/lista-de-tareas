@@ -4,34 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lista de tareas</title>
-  <style>
-    .completada { text-decoration: line-through; color: #888; }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <h1>Lista de tareas</h1>
+  <main class="contenedor">
+    <h1>Lista de tareas</h1>
 
-  <form action="{{ url_for('agregar') }}" method="post">
-    <input type="text" name="texto" placeholder="Escribe una tarea" required maxlength="200" autofocus>
-    <button type="submit">Agregar</button>
-  </form>
+    <form action="{{ url_for('agregar') }}" method="post" class="form-agregar">
+      <input type="text" name="texto" placeholder="Escribe una tarea" required maxlength="200" autofocus>
+      <button type="submit">Agregar</button>
+    </form>
 
-  {% if tareas %}
-    <ul>
-      {% for tarea in tareas %}
-        <li>
-          <span class="{{ 'completada' if tarea.completada else '' }}">{{ tarea.texto }}</span>
-          <form action="{{ url_for('completar', tarea_id=tarea.id) }}" method="post" style="display: inline;">
-            <button type="submit">{{ 'Desmarcar' if tarea.completada else 'Completar' }}</button>
-          </form>
-          <form action="{{ url_for('eliminar', tarea_id=tarea.id) }}" method="post" style="display: inline;">
-            <button type="submit">Eliminar</button>
-          </form>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No hay tareas todavía.</p>
-  {% endif %}
+    {% if tareas %}
+      <ul class="lista">
+        {% for tarea in tareas %}
+          <li class="{{ 'completada' if tarea.completada else '' }}">
+            <span class="texto">{{ tarea.texto }}</span>
+            <div class="acciones">
+              <form action="{{ url_for('completar', tarea_id=tarea.id) }}" method="post">
+                <button type="submit">{{ 'Desmarcar' if tarea.completada else 'Completar' }}</button>
+              </form>
+              <form action="{{ url_for('eliminar', tarea_id=tarea.id) }}" method="post">
+                <button type="submit" class="eliminar">Eliminar</button>
+              </form>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="vacio">No hay tareas todavía.</p>
+    {% endif %}
+  </main>
 </body>
 </html>
