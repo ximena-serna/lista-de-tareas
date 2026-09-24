@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de tareas</title>
+</head>
+<body>
+  <h1>Lista de tareas</h1>
+
+  <form action="{{ url_for('agregar') }}" method="post">
+    <input type="text" name="texto" placeholder="Escribe una tarea" required maxlength="200" autofocus>
+    <button type="submit">Agregar</button>
+  </form>
+
+  {% if tareas %}
+    <ul>
+      {% for tarea in tareas %}
+        <li>{{ tarea.texto }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No hay tareas todavía.</p>
+  {% endif %}
+</body>
+</html>
