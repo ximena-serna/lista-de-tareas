@@ -32,5 +32,11 @@ def completar(tarea_id):
     return redirect(url_for("index"))
 
 
+@app.route("/eliminar/<int:tarea_id>", methods=["POST"])
+def eliminar(tarea_id):
+    tareas[:] = [t for t in tareas if t["id"] != tarea_id]
+    return redirect(url_for("index"))
+
+
 if __name__ == "__main__":
     app.run(port=3000, debug=True)
