@@ -1,23 +1,46 @@
+:root {
+  --cielo: #9dc0dc;
+  --cielo-claro: #d6e6f2;
+  --rosa: #f2a7b6;
+  --rosa-claro: #fbe1e6;
+  --malva: #8e4a5e;
+  --crema: #fff9f4;
+  --negro: #1b1b1f;
+  --gris: #6b6b75;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: system-ui, sans-serif;
-  background: #f4f4f6;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: linear-gradient(180deg, var(--cielo) 0%, var(--cielo-claro) 100%);
+  min-height: 100vh;
   margin: 0;
-  padding: 40px 16px;
-  color: #222;
+  padding: 48px 16px;
+  color: var(--negro);
 }
 
 .contenedor {
-  max-width: 520px;
+  max-width: 580px;
   margin: 0 auto;
-  background: #fff;
-  padding: 24px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  background: var(--crema);
+  padding: 28px;
+  border-radius: 20px;
+  box-shadow: 0 12px 32px rgba(27, 27, 31, 0.15);
 }
 
 h1 {
-  margin-top: 0;
+  margin: 0 0 20px;
+  font-size: 2rem;
+  letter-spacing: -0.5px;
+  border-bottom: 3px solid var(--rosa);
+  padding-bottom: 8px;
+  display: inline-block;
 }
+
+/* Formularios */
 
 .form-agregar {
   display: flex;
@@ -25,30 +48,116 @@ h1 {
   margin-bottom: 20px;
 }
 
-.form-agregar input {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+.form-agregar input,
+.form-agregar select,
+.form-editar input[type="text"],
+.form-editar select {
+  padding: 10px 12px;
+  border: 2px solid var(--rosa-claro);
+  border-radius: 12px;
+  background: #fff;
   font-size: 1rem;
+  color: var(--negro);
 }
 
+.form-agregar input,
+.form-editar input[type="text"] {
+  flex: 1;
+  min-width: 0;
+}
+
+.form-agregar input:focus,
+.form-agregar select:focus,
+.form-editar input:focus,
+.form-editar select:focus {
+  outline: none;
+  border-color: var(--rosa);
+}
+
+/* Botones */
+
 button {
-  padding: 8px 12px;
+  padding: 8px 16px;
   border: none;
-  border-radius: 6px;
-  background: #3b6fd8;
-  color: #fff;
+  border-radius: 999px;
+  background: var(--rosa);
+  color: var(--negro);
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: background 0.15s, color 0.15s;
 }
 
 button:hover {
-  opacity: 0.9;
+  background: var(--malva);
+  color: var(--crema);
 }
 
 button.eliminar {
-  background: #d84b3b;
+  background: transparent;
+  border: 2px solid var(--negro);
+  padding: 6px 14px;
 }
+
+button.eliminar:hover {
+  background: var(--negro);
+  color: var(--crema);
+}
+
+.boton-secundario {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: var(--cielo-claro);
+  color: var(--negro);
+  transition: background 0.15s;
+}
+
+.boton-secundario:hover {
+  background: var(--cielo);
+}
+
+button:focus-visible,
+.boton-secundario:focus-visible,
+.filtros a:focus-visible {
+  outline: 3px solid var(--malva);
+  outline-offset: 2px;
+}
+
+/* Contador y filtros */
+
+.contador {
+  color: var(--gris);
+  font-size: 0.9rem;
+  margin: 0 0 10px;
+}
+
+.filtros {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.filtros a {
+  padding: 5px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--negro);
+  background: var(--cielo-claro);
+}
+
+.filtros a.activo {
+  background: var(--negro);
+  color: var(--crema);
+}
+
+/* Lista */
 
 .lista {
   list-style: none;
@@ -60,84 +169,44 @@ button.eliminar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 2px dashed var(--rosa-claro);
 }
 
-.lista li.completada .texto {
-  text-decoration: line-through;
-  color: #999;
+.lista li:last-child {
+  border-bottom: none;
 }
 
-.acciones {
-  display: flex;
-  gap: 6px;
-}
-
-.vacio {
-  color: #888;
-}
-
-.contador {
-  color: #666;
-  font-size: 0.9rem;
-  margin: 0 0 8px;
-}
-
-.form-agregar select {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
+.lista li.editando {
+  background: var(--rosa-claro);
+  border-radius: 14px;
+  padding: 12px;
+  border-bottom: none;
 }
 
 .info {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  min-width: 0;
 }
 
-.prioridad {
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 999px;
+.texto {
+  overflow-wrap: anywhere;
 }
 
-.prioridad-alta {
-  background: #fde2e2;
-  color: #b42318;
+.lista li.completada .texto {
+  text-decoration: line-through;
+  text-decoration-color: var(--malva);
+  text-decoration-thickness: 2px;
+  color: var(--gris);
 }
 
-.prioridad-media {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-.prioridad-baja {
-  background: #dcfce7;
-  color: #166534;
-}
-
-.filtros {
+.acciones {
   display: flex;
   gap: 6px;
-  margin-bottom: 12px;
-}
-
-.filtros a {
-  padding: 4px 12px;
-  border-radius: 999px;
-  text-decoration: none;
-  font-size: 0.9rem;
-  color: #555;
-  background: #eee;
-}
-
-.filtros a.activo {
-  background: #3b6fd8;
-  color: #fff;
+  flex-shrink: 0;
 }
 
 .form-editar {
@@ -147,27 +216,46 @@ button.eliminar {
   width: 100%;
 }
 
-.form-editar input[type="text"] {
-  flex: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
+/* Etiquetas de prioridad */
+
+.prioridad {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  flex-shrink: 0;
 }
 
-.form-editar select {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+.prioridad-alta {
+  background: var(--malva);
+  color: var(--crema);
 }
 
-.boton-secundario {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 12px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-size: 0.85rem;
-  background: #eee;
-  color: #333;
+.prioridad-media {
+  background: var(--rosa-claro);
+  color: var(--malva);
+}
+
+.prioridad-baja {
+  background: var(--cielo-claro);
+  color: #2f5573;
+}
+
+.vacio {
+  color: var(--gris);
+  text-align: center;
+  padding: 16px 0;
+}
+
+/* Pantallas pequeñas */
+
+@media (max-width: 540px) {
+  .form-agregar {
+    flex-wrap: wrap;
+  }
+
+  .lista li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
