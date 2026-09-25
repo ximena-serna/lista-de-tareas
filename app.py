@@ -1,26 +1,39 @@
 import os
+
 from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
 # Las tareas viven en memoria mientras la aplicación está en ejecución.
-# Cada tarea es un diccionario: {"id": int, "texto": str, "completada": bool}
+# Cada tarea es un diccionario: {"id": int, "texto": str, "completada": bool, "prioridad": str}
 tareas = []
 siguiente_id = 1
+
+# Orden en que se muestran las prioridades (menor número = va primero)
+PRIORIDADES = {"alta": 0, "media": 1, "baja": 2}
 
 
 @app.route("/")
 def index():
     pendientes = sum(1 for t in tareas if not t["completada"])
-    return render_template("index.html", tareas=tareas, pendientes=pendientes)
+    ordenadas = sorted(tareas, key=lambda t: PRIORIDADES[t["prioridad"]])
+    return render_template("index.html", tareas=ordenadas, pendientes=pendientes)
 
 
 @app.route("/agregar", methods=["POST"])
 def agregar():
     global siguiente_id
     texto = request.form.get("texto", "").strip()
+    prioridad = request.form.get("prioridad", "media")
+    if prioridad not in PRIORIDADES:
+        prioridad = "media"
     if texto:
-        tareas.append({"id": siguiente_id, "texto": texto, "completada": False})
+        tareas.append({
+            "id": siguiente_id,
+            "texto": texto,
+            "completada": False,
+            "prioridad": prioridad,
+        })
         siguiente_id += 1
     return redirect(url_for("index"))
 
@@ -41,5 +54,6 @@ def eliminar(tarea_id):
 
 
 if __name__ == "__main__":
+    # El modo debug queda apagado por defecto; se activa con FLASK_DEBUG=1
     debug = os.environ.get("FLASK_DEBUG") == "1"
     app.run(port=3000, debug=debug)

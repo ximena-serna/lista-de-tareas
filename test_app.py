@@ -66,3 +66,19 @@ def test_contador_de_pendientes(client):
     client.post("/completar/1")
     texto = client.get("/").get_data(as_text=True)
     assert "1 tarea pendiente de 2" in texto
+
+def test_agregar_con_prioridad(client):
+    client.post("/agregar", data={"texto": "Urgente", "prioridad": "alta"})
+    assert app_module.tareas[0]["prioridad"] == "alta"
+
+
+def test_prioridad_invalida_usa_media(client):
+    client.post("/agregar", data={"texto": "Algo", "prioridad": "rarisima"})
+    assert app_module.tareas[0]["prioridad"] == "media"
+
+
+def test_tareas_se_ordenan_por_prioridad(client):
+    client.post("/agregar", data={"texto": "Tarea baja", "prioridad": "baja"})
+    client.post("/agregar", data={"texto": "Tarea alta", "prioridad": "alta"})
+    texto = client.get("/").get_data(as_text=True)
+    assert texto.index("Tarea alta") < texto.index("Tarea baja")

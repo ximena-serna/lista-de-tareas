@@ -84,3 +84,38 @@ button.eliminar {
   font-size: 0.9rem;
   margin: 0 0 8px;
 }
+
+.form-agregar select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.prioridad {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.prioridad-alta {
+  background: #fde2e2;
+  color: #b42318;
+}
+
+.prioridad-media {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.prioridad-baja {
+  background: #dcfce7;
+  color: #166534;
+}
