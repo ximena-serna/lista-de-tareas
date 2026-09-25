@@ -59,3 +59,10 @@ def test_texto_con_html_se_muestra_como_texto(client):
     texto = respuesta.get_data(as_text=True)
     assert "&lt;b&gt;hola&lt;/b&gt;" in texto
     assert "<b>hola</b>" not in texto
+
+def test_contador_de_pendientes(client):
+    client.post("/agregar", data={"texto": "Una"})
+    client.post("/agregar", data={"texto": "Dos"})
+    client.post("/completar/1")
+    texto = client.get("/").get_data(as_text=True)
+    assert "1 tarea pendiente de 2" in texto

@@ -16,6 +16,7 @@
     </form>
 
     {% if tareas %}
+    <p class="contador">{{ pendientes }} {{ 'tarea pendiente' if pendientes == 1 else 'tareas pendientes' }} de {{ tareas|length }}</p>
       <ul class="lista">
         {% for tarea in tareas %}
           <li class="{{ 'completada' if tarea.completada else '' }}">

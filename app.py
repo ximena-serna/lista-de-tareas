@@ -11,7 +11,8 @@ siguiente_id = 1
 
 @app.route("/")
 def index():
-    return render_template("index.html", tareas=tareas)
+    pendientes = sum(1 for t in tareas if not t["completada"])
+    return render_template("index.html", tareas=tareas, pendientes=pendientes)
 
 
 @app.route("/agregar", methods=["POST"])

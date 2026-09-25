@@ -78,3 +78,9 @@ button.eliminar {
 .vacio {
   color: #888;
 }
+
+.contador {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0 0 8px;
+}
