@@ -28,6 +28,9 @@ def index():
     if filtro not in FILTROS:
         filtro = "todas"
 
+    # Id de la tarea que se está editando (None si no se edita ninguna)
+    editando = request.args.get("editar", type=int)
+
     pendientes = sum(1 for t in tareas if not t["completada"])
 
     if filtro == "pendientes":
@@ -44,6 +47,7 @@ def index():
         total=len(tareas),
         pendientes=pendientes,
         filtro=filtro,
+        editando=editando,
     )
 
 
@@ -62,6 +66,20 @@ def agregar():
             "prioridad": prioridad,
         })
         siguiente_id += 1
+    return volver_al_inicio()
+
+
+@app.route("/editar/<int:tarea_id>", methods=["POST"])
+def editar(tarea_id):
+    texto = request.form.get("texto", "").strip()
+    prioridad = request.form.get("prioridad", "")
+    for tarea in tareas:
+        if tarea["id"] == tarea_id:
+            if texto:
+                tarea["texto"] = texto
+            if prioridad in PRIORIDADES:
+                tarea["prioridad"] = prioridad
+            break
     return volver_al_inicio()
 
 

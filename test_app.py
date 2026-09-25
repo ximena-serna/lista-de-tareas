@@ -114,3 +114,32 @@ def test_accion_conserva_el_filtro(client):
     client.post("/agregar", data={"texto": "Algo"})
     respuesta = client.post("/completar/1", data={"filtro": "pendientes"})
     assert respuesta.headers["Location"].endswith("/?filtro=pendientes")
+
+def test_editar_tarea(client):
+    client.post("/agregar", data={"texto": "Original", "prioridad": "baja"})
+    client.post("/editar/1", data={"texto": "Editada", "prioridad": "alta"})
+    assert app_module.tareas[0]["texto"] == "Editada"
+    assert app_module.tareas[0]["prioridad"] == "alta"
+
+
+def test_editar_con_texto_vacio_no_cambia(client):
+    client.post("/agregar", data={"texto": "Original"})
+    client.post("/editar/1", data={"texto": "   "})
+    assert app_module.tareas[0]["texto"] == "Original"
+
+
+def test_editar_con_prioridad_invalida_no_la_cambia(client):
+    client.post("/agregar", data={"texto": "Algo", "prioridad": "baja"})
+    client.post("/editar/1", data={"texto": "Algo", "prioridad": "rarisima"})
+    assert app_module.tareas[0]["prioridad"] == "baja"
+
+
+def test_modo_edicion_muestra_formulario(client):
+    client.post("/agregar", data={"texto": "Original"})
+    texto = client.get("/?editar=1").get_data(as_text=True)
+    assert 'value="Original"' in texto
+    assert "Guardar" in texto
+
+
+def test_editar_id_inexistente_no_rompe_la_app(client):
+    assert client.post("/editar/99", data={"texto": "Nada"}).status_code == 302
