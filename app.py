@@ -11,13 +11,40 @@ siguiente_id = 1
 
 # Orden en que se muestran las prioridades (menor número = va primero)
 PRIORIDADES = {"alta": 0, "media": 1, "baja": 2}
+FILTROS = ("todas", "pendientes", "completadas")
+
+
+def volver_al_inicio():
+    """Regresa a la página principal conservando el filtro que estaba activo."""
+    filtro = request.form.get("filtro", "todas")
+    if filtro not in FILTROS or filtro == "todas":
+        return redirect(url_for("index"))
+    return redirect(url_for("index", filtro=filtro))
 
 
 @app.route("/")
 def index():
+    filtro = request.args.get("filtro", "todas")
+    if filtro not in FILTROS:
+        filtro = "todas"
+
     pendientes = sum(1 for t in tareas if not t["completada"])
-    ordenadas = sorted(tareas, key=lambda t: PRIORIDADES[t["prioridad"]])
-    return render_template("index.html", tareas=ordenadas, pendientes=pendientes)
+
+    if filtro == "pendientes":
+        visibles = [t for t in tareas if not t["completada"]]
+    elif filtro == "completadas":
+        visibles = [t for t in tareas if t["completada"]]
+    else:
+        visibles = tareas
+
+    ordenadas = sorted(visibles, key=lambda t: PRIORIDADES[t["prioridad"]])
+    return render_template(
+        "index.html",
+        tareas=ordenadas,
+        total=len(tareas),
+        pendientes=pendientes,
+        filtro=filtro,
+    )
 
 
 @app.route("/agregar", methods=["POST"])
@@ -35,7 +62,7 @@ def agregar():
             "prioridad": prioridad,
         })
         siguiente_id += 1
-    return redirect(url_for("index"))
+    return volver_al_inicio()
 
 
 @app.route("/completar/<int:tarea_id>", methods=["POST"])
@@ -44,13 +71,13 @@ def completar(tarea_id):
         if tarea["id"] == tarea_id:
             tarea["completada"] = not tarea["completada"]
             break
-    return redirect(url_for("index"))
+    return volver_al_inicio()
 
 
 @app.route("/eliminar/<int:tarea_id>", methods=["POST"])
 def eliminar(tarea_id):
     tareas[:] = [t for t in tareas if t["id"] != tarea_id]
-    return redirect(url_for("index"))
+    return volver_al_inicio()
 
 
 if __name__ == "__main__":

@@ -20,26 +20,39 @@
       <button type="submit">Agregar</button>
     </form>
 
-    {% if tareas %}
-      <p class="contador">{{ pendientes }} {{ 'tarea pendiente' if pendientes == 1 else 'tareas pendientes' }} de {{ tareas|length }}</p>
-      <ul class="lista">
-        {% for tarea in tareas %}
-          <li class="{{ 'completada' if tarea.completada else '' }}">
-            <div class="info">
-              <span class="prioridad prioridad-{{ tarea.prioridad }}">{{ tarea.prioridad|capitalize }}</span>
-              <span class="texto">{{ tarea.texto }}</span>
-            </div>
-            <div class="acciones">
-              <form action="{{ url_for('completar', tarea_id=tarea.id) }}" method="post">
-                <button type="submit">{{ 'Desmarcar' if tarea.completada else 'Completar' }}</button>
-              </form>
-              <form action="{{ url_for('eliminar', tarea_id=tarea.id) }}" method="post">
-                <button type="submit" class="eliminar">Eliminar</button>
-              </form>
-            </div>
-          </li>
+    {% if total %}
+      <p class="contador">{{ pendientes }} {{ 'tarea pendiente' if pendientes == 1 else 'tareas pendientes' }} de {{ total }}</p>
+
+      <nav class="filtros">
+        {% for opcion in ['todas', 'pendientes', 'completadas'] %}
+          <a href="{{ url_for('index', filtro=opcion) }}" class="{{ 'activo' if filtro == opcion else '' }}">{{ opcion|capitalize }}</a>
         {% endfor %}
-      </ul>
+      </nav>
+
+      {% if tareas %}
+        <ul class="lista">
+          {% for tarea in tareas %}
+            <li class="{{ 'completada' if tarea.completada else '' }}">
+              <div class="info">
+                <span class="prioridad prioridad-{{ tarea.prioridad }}">{{ tarea.prioridad|capitalize }}</span>
+                <span class="texto">{{ tarea.texto }}</span>
+              </div>
+              <div class="acciones">
+                <form action="{{ url_for('completar', tarea_id=tarea.id) }}" method="post">
+                  <input type="hidden" name="filtro" value="{{ filtro }}">
+                  <button type="submit">{{ 'Desmarcar' if tarea.completada else 'Completar' }}</button>
+                </form>
+                <form action="{{ url_for('eliminar', tarea_id=tarea.id) }}" method="post">
+                  <input type="hidden" name="filtro" value="{{ filtro }}">
+                  <button type="submit" class="eliminar">Eliminar</button>
+                </form>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="vacio">No hay tareas {{ filtro }}.</p>
+      {% endif %}
     {% else %}
       <p class="vacio">No hay tareas todavía.</p>
     {% endif %}

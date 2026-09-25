@@ -82,3 +82,35 @@ def test_tareas_se_ordenan_por_prioridad(client):
     client.post("/agregar", data={"texto": "Tarea alta", "prioridad": "alta"})
     texto = client.get("/").get_data(as_text=True)
     assert texto.index("Tarea alta") < texto.index("Tarea baja")
+
+def test_filtro_pendientes(client):
+    client.post("/agregar", data={"texto": "Hecha"})
+    client.post("/agregar", data={"texto": "Por hacer"})
+    client.post("/completar/1")
+    texto = client.get("/?filtro=pendientes").get_data(as_text=True)
+    assert "Por hacer" in texto
+    assert "Hecha" not in texto
+
+
+def test_filtro_completadas(client):
+    client.post("/agregar", data={"texto": "Hecha"})
+    client.post("/agregar", data={"texto": "Por hacer"})
+    client.post("/completar/1")
+    texto = client.get("/?filtro=completadas").get_data(as_text=True)
+    assert "Hecha" in texto
+    assert "Por hacer" not in texto
+
+
+def test_filtro_invalido_muestra_todas(client):
+    client.post("/agregar", data={"texto": "Una"})
+    client.post("/agregar", data={"texto": "Dos"})
+    client.post("/completar/1")
+    texto = client.get("/?filtro=inventado").get_data(as_text=True)
+    assert "Una" in texto
+    assert "Dos" in texto
+
+
+def test_accion_conserva_el_filtro(client):
+    client.post("/agregar", data={"texto": "Algo"})
+    respuesta = client.post("/completar/1", data={"filtro": "pendientes"})
+    assert respuesta.headers["Location"].endswith("/?filtro=pendientes")

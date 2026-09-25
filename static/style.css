@@ -119,3 +119,23 @@ button.eliminar {
   background: #dcfce7;
   color: #166534;
 }
+
+.filtros {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.filtros a {
+  padding: 4px 12px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  color: #555;
+  background: #eee;
+}
+
+.filtros a.activo {
+  background: #3b6fd8;
+  color: #fff;
+}
